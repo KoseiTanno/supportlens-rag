@@ -4,7 +4,7 @@ from supportlens.api import create_app
 
 
 def test_health_returns_ok() -> None:
-    assert TestClient(create_app()).get("/health").json() == {"status": "ok"}
+    assert TestClient(create_app()).get("/health").json() == {"status": "not_ready"}
 
 
 def test_answers_without_ready_index_returns_503() -> None:

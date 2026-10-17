@@ -1,8 +1,8 @@
-"""Qdrant collection setup and chunk persistence."""
+"""Qdrant collection setup, persistence, and dense retrieval."""
 
 from qdrant_client import QdrantClient, models
 
-from supportlens.models import Chunk
+from supportlens.models import Chunk, SearchHit
 
 
 class QdrantChunkStore:
@@ -26,3 +26,21 @@ class QdrantChunkStore:
             for chunk, vector in zip(chunks, vectors, strict=True)
         ]
         self.client.upsert(self.collection, points)
+
+    def search(self, vector: list[float], limit: int = 10) -> list[SearchHit]:
+        """Return typed chunks with their Qdrant similarity score."""
+        result = self.client.query_points(
+            collection_name=self.collection,
+            query=vector,
+            using="dense",
+            limit=limit,
+            with_payload=True,
+        )
+        return [
+            SearchHit(
+                chunk=Chunk.model_validate(point.payload),
+                score=float(point.score),
+                dense_rank=rank,
+            )
+            for rank, point in enumerate(result.points, start=1)
+        ]

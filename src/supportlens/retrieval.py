@@ -56,16 +56,30 @@ def rrf_fuse(rankings: list[list[SearchHit]], k: int = 60) -> list[SearchHit]:
     ]
 
 
+class Reranker(Protocol):
+    def rerank(self, question: str, hits: list[SearchHit]) -> list[SearchHit]: ...
+
+
 class HybridRetriever:
-    """Combines a caller-provided dense ranking with BM25 using RRF."""
+    """Combines dense and lexical retrieval, with an optional reranking stage."""
 
     def __init__(
-        self, bm25: Bm25Index, dense_search: Callable[[str, int], list[SearchHit]]
+        self,
+        bm25: Bm25Index,
+        dense_search: Callable[[str, int], list[SearchHit]],
+        reranker: Reranker | None = None,
     ) -> None:
         self.bm25 = bm25
         self.dense_search = dense_search
+        self.reranker = reranker
 
-    def search(self, question: str, limit: int = 10) -> list[SearchHit]:
-        return rrf_fuse([self.dense_search(question, limit), self.bm25.search(question, limit)])[
-            :limit
-        ]
+    def search(
+        self, question: str, limit: int = 10, mode: str = "hybrid_rerank"
+    ) -> list[SearchHit]:
+        dense = self.dense_search(question, limit)
+        if mode == "dense":
+            return dense[:limit]
+        merged = rrf_fuse([dense, self.bm25.search(question, limit)])
+        if mode == "hybrid" or self.reranker is None:
+            return merged[:limit]
+        return self.reranker.rerank(question, merged[: max(limit * 3, limit)])[:limit]

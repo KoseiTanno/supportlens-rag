@@ -4,6 +4,8 @@ services:
     ports: ["8000:8000"]
     environment:
       SUPPORTLENS_QDRANT_URL: http://qdrant:6333
+      SUPPORTLENS_CORPUS_DIR: /app/data/snapshot
+      SUPPORTLENS_ENABLE_RERANKER: "false"
     depends_on: [qdrant]
   qdrant:
     image: qdrant/qdrant:v1.12.1
