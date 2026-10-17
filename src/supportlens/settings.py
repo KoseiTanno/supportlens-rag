@@ -16,4 +16,3 @@ class Settings(BaseSettings):
     openai_api_key: SecretStr | None = None
     max_question_chars: Annotated[int, Field(gt=0, le=10_000)] = 1_000
     evidence_score_threshold: Annotated[float, Field(ge=0, le=1)] = 0.35
-
