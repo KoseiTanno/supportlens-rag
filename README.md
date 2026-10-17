@@ -2,6 +2,8 @@
 
 > Citation-grounded Japanese GitHub Actions support-assist RAG API.
 
+> **Status: work in progress.** The repository currently contains the ingestion, chunking, lexical-retrieval, API-contract, safety-gate, and deployment foundation. Dense retrieval, reranking, provider wiring, and published evaluation results are not yet complete; do not present this revision as a production-ready demo.
+
 GitHub Actions の日本語公式ドキュメントから、根拠・URL・文書版を伴うサポート回答案を作るRAG APIです。自動返信は行わず、根拠が弱い質問には回答しません。
 
 ## Architecture
