@@ -1,0 +1,1 @@
+Content derived from [GitHub Docs](https://docs.github.com/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Source URLs and snapshot revision are recorded in `snapshot/manifest.json`.
