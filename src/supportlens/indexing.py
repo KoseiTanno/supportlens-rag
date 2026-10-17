@@ -1,5 +1,7 @@
 """Qdrant collection setup, persistence, and dense retrieval."""
 
+from uuid import NAMESPACE_URL, uuid5
+
 from qdrant_client import QdrantClient, models
 
 from supportlens.models import Chunk, SearchHit
@@ -21,7 +23,9 @@ class QdrantChunkStore:
     def upsert(self, chunks: list[Chunk], vectors: list[list[float]]) -> None:
         points = [
             models.PointStruct(
-                id=chunk.chunk_id, vector={"dense": vector}, payload=chunk.model_dump(mode="json")
+                id=str(uuid5(NAMESPACE_URL, chunk.chunk_id)),
+                vector={"dense": vector},
+                payload=chunk.model_dump(mode="json"),
             )
             for chunk, vector in zip(chunks, vectors, strict=True)
         ]

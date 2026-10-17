@@ -13,7 +13,9 @@ from pydantic import BaseModel, HttpUrl
 
 from supportlens.models import DocumentRecord, SnapshotManifest
 
-MAX_BYTES = 2 * 1024 * 1024
+# The Japanese workflow-syntax reference is currently about 2.3 MiB.
+# Keep a bounded response while allowing that official reference to be indexed.
+MAX_BYTES = 3 * 1024 * 1024
 
 
 class SourceSpec(BaseModel):
