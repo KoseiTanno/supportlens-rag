@@ -1,0 +1,47 @@
+[project]
+name = "supportlens-rag"
+version = "0.1.0"
+description = "Citation-grounded Japanese GitHub Actions support RAG API"
+requires-python = ">=3.12"
+dependencies = [
+  "beautifulsoup4>=4.12",
+  "fastapi>=0.115",
+  "httpx>=0.27",
+  "openai>=1.0",
+  "pydantic-settings>=2.6",
+  "qdrant-client>=1.12",
+  "rank-bm25>=0.2.2",
+  "sentence-transformers>=3.3",
+  "uvicorn[standard]>=0.32",
+]
+
+[dependency-groups]
+dev = [
+  "mypy>=1.13",
+  "pytest>=8.3",
+  "pytest-asyncio>=0.24",
+  "ruff>=0.8",
+]
+
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/supportlens"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src"]
