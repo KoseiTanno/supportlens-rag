@@ -3,6 +3,8 @@
 from dataclasses import dataclass
 from typing import Protocol
 
+import httpx
+
 from supportlens.models import Citation, SearchHit
 
 
@@ -35,6 +37,31 @@ class ExtractiveAnswerGenerator:
 
     def generate_from_citations(self, citations: list[Citation]) -> str:
         return citations[0].excerpt if citations else ""
+
+
+class OllamaAnswerGenerator:
+    """Local, API-key-free answer generation through Ollama's chat API."""
+
+    def __init__(self, base_url: str, model: str) -> None:
+        self.base_url = base_url.removesuffix("/")
+        self.model = model
+
+    def generate(self, prompt: str) -> str:
+        response = httpx.post(
+            f"{self.base_url}/api/chat",
+            json={
+                "model": self.model,
+                "messages": [{"role": "user", "content": prompt}],
+                "stream": False,
+                "options": {"temperature": 0},
+            },
+            timeout=120,
+        )
+        response.raise_for_status()
+        content = response.json().get("message", {}).get("content")
+        if not isinstance(content, str):
+            raise ValueError("Ollama response did not include message content")
+        return content
 
 
 def citations_from_hits(hits: list[SearchHit]) -> list[Citation]:

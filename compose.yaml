@@ -6,6 +6,9 @@ services:
       SUPPORTLENS_QDRANT_URL: http://qdrant:6333
       SUPPORTLENS_CORPUS_DIR: /app/data/snapshot
       SUPPORTLENS_ENABLE_RERANKER: "false"
+      SUPPORTLENS_LLM_PROVIDER: ${SUPPORTLENS_LLM_PROVIDER:-extractive}
+      SUPPORTLENS_OLLAMA_BASE_URL: ${SUPPORTLENS_OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      SUPPORTLENS_OLLAMA_MODEL: ${SUPPORTLENS_OLLAMA_MODEL:-qwen2.5:3b}
     depends_on: [qdrant]
   qdrant:
     image: qdrant/qdrant:v1.19.1

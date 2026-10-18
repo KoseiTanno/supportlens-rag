@@ -8,7 +8,12 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from supportlens.chunking import chunk_markdown
-from supportlens.generation import AnswerGenerator, EvidenceGate, ExtractiveAnswerGenerator
+from supportlens.generation import (
+    AnswerGenerator,
+    EvidenceGate,
+    ExtractiveAnswerGenerator,
+    OllamaAnswerGenerator,
+)
 from supportlens.indexing import QdrantChunkStore
 from supportlens.models import Chunk, SearchHit, SnapshotManifest
 from supportlens.retrieval import Bm25Index, HybridRetriever
@@ -112,10 +117,14 @@ def build_service(settings: Settings) -> AnswerService:
         reranker=reranker,
     )
     generator: AnswerGenerator
-    if settings.openai_api_key is None:
+    if settings.llm_provider == "extractive":
         generator = ExtractiveAnswerGenerator()
-    else:
+    elif settings.llm_provider == "ollama":
+        generator = OllamaAnswerGenerator(settings.ollama_base_url, settings.ollama_model)
+    elif settings.openai_api_key is not None:
         generator = OpenAIAnswerGenerator(
             settings.openai_api_key.get_secret_value(), settings.openai_model
         )
+    else:
+        raise ValueError("SUPPORTLENS_OPENAI_API_KEY is required when llm_provider=openai")
     return AnswerService(retriever, generator, EvidenceGate(settings.evidence_score_threshold))

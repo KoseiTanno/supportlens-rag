@@ -1,6 +1,6 @@
 """Runtime configuration loaded from environment variables."""
 
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     enable_reranker: bool = False
     openai_api_key: SecretStr | None = None
     openai_model: str = "gpt-4.1-mini"
+    llm_provider: Literal["extractive", "ollama", "openai"] = "extractive"
+    ollama_base_url: str = "http://host.docker.internal:11434"
+    ollama_model: str = "qwen2.5:3b"
     max_question_chars: Annotated[int, Field(gt=0, le=10_000)] = 1_000
     # RRF hybrid scores are rank-based and typically around 0.03 for relevant hits.
     evidence_score_threshold: Annotated[float, Field(ge=0, le=1)] = 0.02
