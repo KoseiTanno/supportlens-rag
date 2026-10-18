@@ -1,15 +1,26 @@
 """FastAPI application factory."""
 
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from supportlens.models import AnswerRequest, AnswerResponse, SearchRequest
 from supportlens.runtime import build_service
 from supportlens.service import AnswerService
 from supportlens.settings import Settings
 
+WEB_ROOT = Path(__file__).with_name("web")
+
 
 def create_app(service: AnswerService | None = None, startup_error: str | None = None) -> FastAPI:
     app = FastAPI(title="SupportLens RAG", version="0.1.0")
+    app.mount("/assets", StaticFiles(directory=WEB_ROOT), name="assets")
+
+    @app.get("/", include_in_schema=False)
+    def home() -> FileResponse:
+        return FileResponse(WEB_ROOT / "index.html")
 
     @app.get("/health")
     def health() -> dict[str, str]:

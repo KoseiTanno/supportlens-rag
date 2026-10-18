@@ -30,7 +30,18 @@ curl http://localhost:8000/health
 
 初期状態の `/health` は `{"status":"not_ready"}` です。空の知識ベースを「正常」と偽装しないためで、準備後は API コンテナを再起動してください。
 
-`.env` に `SUPPORTLENS_OPENAI_API_KEY` を設定すると、引用した文書だけに基づく回答案を生成します。未設定時は外部 API を呼ばず、最上位の根拠抜粋を返します。
+準備後は [http://localhost:8000](http://localhost:8000) を開くと、非エンジニア向けの質問画面を使えます。自然な日本語で質問すると、回答と参照した公式ドキュメントへのリンクを表示します。質問例の選択、キーボード送信（`⌘/Ctrl + Enter`）、待機・根拠不足・起動前エラーの各状態にも対応しています。
+
+### 無料で自然な回答を試す（Ollama）
+
+Ollama を入れてモデルを取得すれば、API キーなしでローカル生成を使えます。
+
+```bash
+ollama pull qwen2.5:3b
+SUPPORTLENS_LLM_PROVIDER=ollama docker compose up -d --build
+```
+
+Docker Desktop では `host.docker.internal` 経由でローカルの Ollama に接続します。未設定時は外部 API を呼ばず、最上位の根拠抜粋を返す抽出モードです。OpenAI を使う場合だけ、`.env` に `SUPPORTLENS_OPENAI_API_KEY` を設定し、`SUPPORTLENS_LLM_PROVIDER=openai` を指定してください。
 
 `SUPPORTLENS_ENABLE_RERANKER=true` は多言語 cross-encoder を追加で取得して rerank を有効にします。CPU・ディスクを使うため既定では無効で、無効時の `hybrid_rerank` は hybrid 検索にフォールバックします。
 

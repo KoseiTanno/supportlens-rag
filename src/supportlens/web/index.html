@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="GitHub Actions の公式ドキュメントを根拠に、質問へ日本語で答える SupportLens。"
+    />
+    <title>SupportLens | GitHub Actions ナレッジ</title>
+    <link rel="stylesheet" href="/assets/app.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="SupportLens ホーム">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 4.5h16v11H9l-5 4v-15Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 8h8M8 11.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <span>SupportLens</span>
+        </a>
+        <div class="connection" aria-live="polite">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-copy">接続を確認中</span>
+        </div>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">GITHUB ACTIONS KNOWLEDGE BASE</p>
+        <h1 id="page-title">迷いを、根拠とともに<span class="desktop-break"><br /></span>ほどいていく。</h1>
+        <p class="lead">GitHub Actions について自然な言葉で質問すると、公式ドキュメントをもとに回答します。</p>
+      </section>
+
+      <section class="question-card" aria-labelledby="question-heading">
+        <div class="question-card-head">
+          <div>
+            <h2 id="question-heading">質問する</h2>
+            <p>困っていることを、そのまま書いてください。</p>
+          </div>
+          <span class="source-badge">公式ドキュメントを参照</span>
+        </div>
+
+        <form id="question-form" novalidate>
+          <label class="input-label" for="question">質問内容</label>
+          <textarea
+            id="question"
+            name="question"
+            maxlength="1000"
+            placeholder="例：シークレットはどのように設定・利用しますか？"
+            required
+          ></textarea>
+          <div class="form-footer">
+            <p id="form-message" class="form-message" aria-live="polite">⌘ + Enter でも送信できます</p>
+            <button id="submit-button" type="submit">
+              <span>質問する</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </form>
+
+        <div class="example-area" aria-label="質問例">
+          <span>たとえば</span>
+          <button type="button" class="example" data-question="GitHub Actionsのsecretsはどのように利用しますか？">secrets の使い方</button>
+          <button type="button" class="example" data-question="ワークフローの実行ログはどこで確認できますか？">実行ログの確認方法</button>
+          <button type="button" class="example" data-question="ワークフローの基本的な書き方を教えてください。">ワークフローの書き方</button>
+        </div>
+      </section>
+
+      <section id="answer-region" class="answer-region" aria-live="polite" aria-busy="false">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M18.36 5.64l-2.12 2.12M7.76 16.24l-2.12 2.12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <p>質問を入力すると、ここに回答と参照元が表示されます。</p>
+        </div>
+      </section>
+
+      <footer>
+        <span>回答は公式ドキュメントへの案内です。重要な操作は出典を確認してください。</span>
+        <a href="/docs" target="_blank" rel="noopener noreferrer">API ドキュメント</a>
+      </footer>
+    </main>
+    <script src="/assets/app.js" defer></script>
+  </body>
+</html>
